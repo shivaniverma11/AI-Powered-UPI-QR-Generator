@@ -1,29 +1,31 @@
 import sqlite3
+from datetime import datetime
 
 def init_db():
     conn = sqlite3.connect("payments.db")
     c = conn.cursor()
 
-    # Check existing columns
     c.execute("PRAGMA table_info(payments)")
     columns = c.fetchall()
 
-    # If old structure exists → drop table
-    if len(columns) != 2:
+    # If old structure exists (only 2 columns) → migrate
+    if len(columns) not in (0, 4):
         c.execute("DROP TABLE IF EXISTS payments")
 
-    # Create new table
     c.execute('''CREATE TABLE IF NOT EXISTS payments
-                 (name TEXT, upi TEXT)''')
+                 (name TEXT, upi TEXT, amount REAL, timestamp TEXT)''')
 
     conn.commit()
     conn.close()
 
-def save_payment(name, upi):
+def save_payment(name, upi, amount=0):
     conn = sqlite3.connect("payments.db")
     c = conn.cursor()
 
-    c.execute("INSERT INTO payments (name, upi) VALUES (?, ?)", (name, upi))
+    c.execute(
+        "INSERT INTO payments (name, upi, amount, timestamp) VALUES (?, ?, ?, ?)",
+        (name, upi, amount, datetime.now().isoformat())
+    )
 
     conn.commit()
     conn.close()
