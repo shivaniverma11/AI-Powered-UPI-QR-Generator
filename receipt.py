@@ -1,12 +1,13 @@
 import datetime
 
-def generate_receipt(name, upi):
+def generate_receipt(name, upi, amount=0):
     file_name = "receipt.txt"
 
-    with open(file_name, "w") as f:
+    with open(file_name, "w", encoding="utf-8") as f:
         f.write("------ PAYMENT RECEIPT ------\n")
         f.write(f"Name: {name}\n")
         f.write(f"UPI ID: {upi}\n")
+        f.write(f"Amount: ₹{amount}\n")
         f.write(f"Date: {datetime.datetime.now()}\n")
 
     return file_name
