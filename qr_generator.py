@@ -1,8 +1,13 @@
 import qrcode
 from PIL import Image
 
-def generate_qr(upi_id, name):
+def generate_qr(upi_id, name, amount=None, note=""):
     upi_url = f"upi://pay?pa={upi_id}&pn={name}&cu=INR"
+
+    if amount:
+        upi_url += f"&am={amount}"
+    if note:
+        upi_url += f"&tn={note}"
 
     qr = qrcode.QRCode(box_size=10, border=4)
     qr.add_data(upi_url)
