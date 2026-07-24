@@ -1,0 +1,7 @@
+payments.db
+__pycache__/
+*.pyc
+.venv/
+venv/
+upi_qr.png
+receipt.txt
